@@ -7,23 +7,44 @@
   <body>
     <button onclick="updateTime()">Click me!</button>
     <script>
-      function updateTime() {
-        var d = new Date();
-        var url = "https://raw.githubusercontent.com/AlbertRoca29/Start_Instance/master/last_time_checked.txt";
-        fetch(url, {
-          method: "PUT",
-          body: d.toString()
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Failed to update last_time_checked");
-          }
-          console.log("Updated last_time_clicked");
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      const { Octokit } = require("@octokit/rest");
+      const fs = require("fs");
+
+      const octokit = new Octokit({
+        auth: "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",
+      });
+
+      async function commitFileToRepo(owner, repo, path, message, content) {
+        try {
+          const file = await octokit.repos.getContent({
+            owner,
+            repo,
+            path,
+          });
+
+          const sha = file.data.sha;
+
+          const buffer = Buffer.from(content);
+          const base64Content = buffer.toString("base64");
+
+          await octokit.repos.createOrUpdateFileContents({
+            owner,
+            repo,
+            path,
+            message,
+            content: base64Content,
+            sha,
+          });
+
+          console.log(`File ${path} committed to repository ${owner}/${repo}`);
+        } catch (err) {
+          console.error(`Error committing file: ${err.message}`);
+        }
       }
+
+      // Example usage:
+      commitFileToRepo("AlbertRoca29", "Start_Instance", "last_time_checked.txt", "update", "Hello, world!");
+
     </script>
   </body>
 </html>
