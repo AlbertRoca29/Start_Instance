@@ -5,25 +5,27 @@
     <title>Button Demo</title>
   </head>
   <body>
-    <button onclick="updateTime()">START</button>
-    <script src = "https://cdn.jsdelivr.net/npm/@octokit/core@4.2.0/dist-node/index.min.js">
-      const { Octokit } = require("@octokit/rest");
-      const fs = require("fs");
+    <button onclick="commitFile()">Commit File</button>
+    <script src="https://cdn.jsdelivr.net/npm/@octokit/core@4.2.0/dist-node/index.min.js"></script>
+    <script>
+      async function commitFile() {
+        const { Octokit } = window["@octokit/rest"];
+        const octokit = new Octokit({
+          auth: "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",
+        });
+        const owner = "AlbertRoca29";
+        const repo = "Start_Instance";
+        const path = "last_time_checked.txt";
+        const message = "update";
+        const content = "Hello, world!";
 
-      const octokit = new Octokit({
-        auth: "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",
-      });
-
-      async function commitFileToRepo(owner, repo, path, message, content) {
         try {
           const file = await octokit.repos.getContent({
             owner,
             repo,
             path,
           });
-
           const sha = file.data.sha;
-
           const buffer = Buffer.from(content);
           const base64Content = buffer.toString("base64");
 
@@ -41,10 +43,6 @@
           console.error(`Error committing file: ${err.message}`);
         }
       }
-
-      // Example usage:
-      commitFileToRepo("AlbertRoca29", "Start_Instance", "last_time_checked.txt", "update", "Hello, world!");
-
     </script>
   </body>
 </html>
