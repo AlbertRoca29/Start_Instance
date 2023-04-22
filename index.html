@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Button Demo</title>
+  </head>
+  <body>
+    <button onclick="updateTime()">Click me!</button>
+    <script>
+      function updateTime() {
+        var d = new Date();
+        var url = "https://raw.githubusercontent.com/<username>/<repository>/gh-pages/last_time_clicked.txt";
+        fetch(url, {
+          method: "PUT",
+          body: d.toString()
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to update last_time_clicked");
+          }
+          console.log("Updated last_time_clicked");
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
+    </script>
+  </body>
+</html>
