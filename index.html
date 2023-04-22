@@ -9,14 +9,14 @@
     <script>
       function updateTime() {
         var d = new Date();
-        var url = "https://raw.githubusercontent.com/AlbertRoca29/Start_Instance/master/last_time_clicked.txt";
+        var url = "https://raw.githubusercontent.com/AlbertRoca29/Start_Instance/master/last_time_checked.txt";
         fetch(url, {
           method: "PUT",
           body: d.toString()
         })
         .then(response => {
           if (!response.ok) {
-            throw new Error("Failed to update last_time_clicked");
+            throw new Error("Failed to update last_time_checked");
           }
           console.log("Updated last_time_clicked");
         })
